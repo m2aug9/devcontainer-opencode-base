@@ -13,6 +13,11 @@ devcontainer-opencode-baseは、OpenCodeを使用するための基本的な開�
   - `release/*` ブランチは、リリース準備のためのコードを保持します。
   - `hotfix/*` ブランチは、緊急のバグ修正に使用されます。
 
+```bash
+# ブランチの作成例
+git switch -c feature/new-feature
+```
+
 ## コミットメッセージのルール
 
 - コミットメッセージは、以下の形式で記述してください。
@@ -37,3 +42,9 @@ devcontainer-opencode-baseは、OpenCodeを使用するための基本的な開�
 - プルリクエストには、関連するチケット番号を含めてください。
 - プルリクエストは、CI/CD パイプラインが成功するまでマージしないでください。
 - プルリクエストがマージされた後は、関連するブランチを削除してください。
+
+```bash
+# ブランチの削除例
+git branch -d feature/new-feature
+git push origin --delete feature/new-feature
+```
