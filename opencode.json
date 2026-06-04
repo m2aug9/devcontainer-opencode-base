@@ -1,0 +1,12 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "<MODEL_NAME>",
+  "provider": {
+    "amazon-bedrock": {
+      "options": {
+        "region": "<AWS_REGION>",
+        "profile": "<AWS_PROFILE_NAME>"
+      }
+    }
+  }
+}
