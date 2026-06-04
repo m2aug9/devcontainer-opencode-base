@@ -1,0 +1,13 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/workspaces:cached
+      - /home/ubuntu/.aws:/home/ubuntu/.aws
+      - shell-history:/home/ubuntu/.history
+    command: sleep infinity
+
+volumes:
+  shell-history:

@@ -216,3 +216,15 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# AWS
+.aws/
+
+# OpenCode
+.opencode/
+
+# VS Code settings
+.vscode/
+
+# Node.js dependencies
+node_modules/

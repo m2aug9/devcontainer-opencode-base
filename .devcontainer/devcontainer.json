@@ -1,0 +1,34 @@
+{
+  "name": "FinancialAnalysis",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "app",
+  "workspaceFolder": "/workspaces",
+  "remoteUser": "ubuntu",
+  "postCreateCommand": "bash scripts/setup.sh",
+  "containerEnv": {
+    "HISTFILE": "/home/ubuntu/.history/history",
+    "HISTSIZE": "10000",
+    "SAVEHIST": "10000"
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "bash"
+          },
+          "zsh": {
+            "path": "zsh"
+          }
+        }
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "amazonwebservices.aws-toolkit-vscode",
+        "ms-azuretools.vscode-containers"
+      ]
+    }
+  }
+}
