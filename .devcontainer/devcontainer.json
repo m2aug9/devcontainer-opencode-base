@@ -1,10 +1,9 @@
 {
-  "name": "FinancialAnalysis",
+  "name": "ProjectName",
   "dockerComposeFile": ["../docker-compose.yml"],
   "service": "app",
-  "workspaceFolder": "/workspaces",
+  "workspaceFolder": "/workspaces/ProjectName",
   "remoteUser": "ubuntu",
-  "postCreateCommand": "bash scripts/setup.sh",
   "containerEnv": {
     "HISTFILE": "/home/ubuntu/.history/history",
     "HISTSIZE": "10000",
@@ -27,7 +26,9 @@
         "ms-python.python",
         "ms-python.vscode-pylance",
         "amazonwebservices.aws-toolkit-vscode",
-        "ms-azuretools.vscode-containers"
+        "amazonwebservices.amazon-q-vscode",
+        "ms-azuretools.vscode-containers",
+        "openai.chatgpt"
       ]
     }
   }
