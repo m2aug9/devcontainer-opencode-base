@@ -4,8 +4,9 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - .:/workspaces:cached
+      - .:/workspaces/ProjectName:cached
       - /home/ubuntu/.aws:/home/ubuntu/.aws
+      - /home/ubuntu/.ssh:/home/ubuntu/.ssh
       - shell-history:/home/ubuntu/.history
     command: sleep infinity
 

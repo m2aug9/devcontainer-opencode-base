@@ -1,11 +1,4 @@
-FROM ubuntu:24.04
-
-ENV DEBIAN_FRONTEND=noninteractive
-ENV MISE_DATA_DIR=/mise
-ENV MISE_CONFIG_DIR=/mise
-ENV MISE_CACHE_DIR=/mise/cache
-ENV MISE_INSTALL_PATH=/usr/local/bin/mise
-ENV PATH=/mise/shims:/mise/bin:$PATH
+FROM ubuntu:26.04
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -17,8 +10,31 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gnupg \
     unzip \
     zsh \
+    wget \
+    tzdata \
+    zlib1g-dev \
+    libncurses5-dev \
+    libgdbm-dev \
+    libnss3-dev \
+    libssl-dev \
+    libreadline-dev \
+    libffi-dev \
+    libsqlite3-dev \
+    libbz2-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Python 3.14
+RUN wget -q "https://www.python.org/ftp/python/3.14.5/Python-3.14.5.tgz" \
+    && tar xvf Python-3.14.5.tgz \
+    && cd Python-3.14.5 \
+    && ./configure --enable-optimizations --without-ensurepip --enable-loadable-sqlite-extensions \
+    && make -j 8 \
+    && make install \
+    && cd ../ && rm -rf Python-3.14.5 \
+    && ln -s /usr/local/bin/python3 /usr/local/bin/python \
+    && python -m ensurepip --default-pip
+
+# Install AWS CLI v2
 RUN case "$(dpkg --print-architecture)" in \
         amd64) awscli_arch="x86_64" ;; \
         arm64) awscli_arch="aarch64" ;; \
@@ -29,6 +45,7 @@ RUN case "$(dpkg --print-architecture)" in \
     && /tmp/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update \
     && rm -rf /tmp/aws /tmp/awscliv2.zip
 
+# Install GitHub CLI
 RUN mkdir -p -m 755 /etc/apt/keyrings \
 	&& out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
 	&& cat $out | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
@@ -38,20 +55,16 @@ RUN mkdir -p -m 755 /etc/apt/keyrings \
 	&& apt-get update \
 	&& apt-get install gh -y
 
-RUN install -d -o ubuntu -g ubuntu /mise /workspaces /home/ubuntu/.config /home/ubuntu/.history
+# Install Node.js 24.x
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
+    && apt-get install -y nodejs
 
-RUN curl -fsSL https://mise.run | sh
+WORKDIR /workspaces/FinancialAnalysis
 
-COPY --chown=ubuntu:ubuntu mise.toml /workspaces/mise.toml
-COPY --chown=ubuntu:ubuntu pyproject.toml /workspaces/pyproject.toml
-COPY --chown=ubuntu:ubuntu requirements.txt /workspaces/requirements.txt
-
-WORKDIR /workspaces
-
-RUN mise trust /workspaces/mise.toml \
-    && mise install --yes \
-    && npm install -g aws-cdk opencode-ai \
-    && chown -R ubuntu:ubuntu /mise
+# Install OpenAI Codex, Anthropic Claude Code, and OpenCode AI CLI tools
+# RUN npm install -g aws-cdk @openai/codex @anthropic-ai/claude-code opencode-ai
+# Install AWS CDK, OpenCode AI CLI tools
+RUN npm install -g aws-cdk opencode-ai
 
 USER ubuntu
 
